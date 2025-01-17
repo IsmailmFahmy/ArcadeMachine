@@ -4,8 +4,10 @@ Snake Game Implementation
 This script implements the classic Snake game using Pygame. It includes various challenges for functionality,
 such as generating fruit, detecting collisions, and managing game state.
 """
-
+import sys
 import time
+from operator import truediv
+
 import pygame
 import random
 from config import get_game_config, initialize_snake
@@ -41,7 +43,15 @@ def generate_fruit_position(snake_body, window_x, window_y):
     return (x,y)
     # CHALLENGE 4: make sure the fruit doesn't spawn on the snakes body
     # CHALLENGE 2: Implement the function generate_fruit_position to spawn a fruit RANDOMLY
-    pass
+    fruitx=snake_body[0][0]
+    fruity=snake_body[0][1]
+
+    for [fruit_x, fruit_y] in snake_body:
+        fruitx=random.randint(0,int(window_x/10))*10
+        fruity=random.randint(0,int(window_y/10))*10
+
+    return fruitx, fruity
+
 
 
 def check_boundary_collision(snake_position, window_x, window_y):
@@ -70,6 +80,10 @@ def check_self_collision(snake_position, snake_body):
         bool: True if a self-collision occurred, False otherwise.
     """
     # CHALLENGE 6: Stay in One Piece!!
+    if snake_position in snake_body[1:]:
+        return True
+    else :
+        return False
     pass
 
 
@@ -105,6 +119,7 @@ def game_over():
 # CHALLENGE 9: pause the screen
 
 # CHALLENGE 10: Bombs
+
 
 ###########################################################################
 # Setup
@@ -153,7 +168,6 @@ while True:
         if event.type == pygame.QUIT:
             quit()
         elif event.type == pygame.KEYDOWN:
-
             # CHALLENGE 1: Improve input handling for smoother gameplay
             if event.key == pygame.K_UP and direction !="DOWN":
                 direction = "UP"
@@ -166,7 +180,9 @@ while True:
             
 
     # CHALLENGE 1: Movement logic
-    if direction == "RIGHT":
+    if direction == "LEFT":
+        snake_position[0] -= 10
+    elif direction == "RIGHT":
         snake_position[0] += 10
     elif direction == "UP":
         snake_position[1] -= 10
@@ -190,8 +206,12 @@ while True:
 
     # CHALLENGE 3: Generate a new fruit position when the previous one is eaten (Hints 3 and 4)
 
+    if(check_boundary_collision(snake_position, window_x, window_y)):
+        game_over(game_window,window_x,window_y,colors,score)
     # CHALLENGE 5: make sure the 'check_boundary_collision' is used
 
+    if(check_self_collision(snake_position, snake_body)):
+        game_over(game_window,window_x,window_y,colors,score)
     # CHALLENGE 6: call the function you implemented
     if(check_self_collision(snake_position,snake_body)):game_over()
 

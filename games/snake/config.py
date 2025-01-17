@@ -44,6 +44,7 @@ def get_game_config():
             "black": black,
             "white": white,
             "green": green,
+            "red": red,
         },
         "fruits_path": {
             "apple": APPLE_PATH,
