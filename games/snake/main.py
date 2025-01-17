@@ -28,7 +28,14 @@ def generate_fruit_position(snake_body, window_x, window_y):
     """
     # CHALLENGE 4: make sure the fruit doesn't spawn on the snakes body
     # CHALLENGE 2: Implement the function generate_fruit_position to spawn a fruit RANDOMLY
-    pass
+    fruitx=snake_body[0][0]
+    fruity=snake_body[0][1]
+
+    for [fruit_x, fruit_y] in snake_body:
+        fruitx=random.randint(0,int(window_x/10))*10
+        fruity=random.randint(0,int(window_y/10))*10
+
+    return fruitx, fruity
 
 
 
@@ -110,6 +117,7 @@ fruit_position = [360, 240]
 fruit_spawn = True
 
 #  CHALLENGE 2: call the function you implemented and spawn the fruit
+fruit_position=generate_fruit_position(snake_body, window_x, window_y)
 
 # Define the initial direction and score
 direction = "RIGHT"  # Snake starts moving to the right
@@ -157,7 +165,9 @@ while True:
         snake_position[0] == fruit_position[0]
         and snake_position[1] == fruit_position[1]
     ):
-        # CHALLENGE 3: (Hints 1 and 2)
+        fruit_position=generate_fruit_position(snake_body, window_x, window_y)
+        score += 1
+        print(score)
         pass
     else:
         snake_body.pop()
