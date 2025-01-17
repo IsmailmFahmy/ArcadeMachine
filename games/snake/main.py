@@ -4,7 +4,7 @@ Snake Game Implementation
 This script implements the classic Snake game using Pygame. It includes various challenges for functionality,
 such as generating fruit, detecting collisions, and managing game state.
 """
-
+import sys
 import time
 from operator import truediv
 
@@ -81,7 +81,7 @@ def check_self_collision(snake_position, snake_body):
     pass
 
 
-def game_over():
+def game_over(game_window,window_x,window_y,colors,score):
     """
     Handles the Game Over sequence, displaying a message and pausing the game before quitting.
 
@@ -95,14 +95,24 @@ def game_over():
         None
     """
     # CHALLENGE 7: Game Over in Style!
+    my_font = pygame.font.SysFont('Arial bold', 80)
+    game_window.fill(colors['red'])
+    text_surface = my_font.render('Game Over', True, colors["green"])
+
+    game_window.blit(text_surface, (window_x//2-150,window_y//2-100 ))
+    pygame.display.flip()
+    time.sleep(10)  # render game over for 3 sec then quit
+
     print("Game Over")
-    time.sleep(3)  # render game over for 3 sec then quit
+    # pygame.draw.rect(game_window, colors['red'], (window_x//2, window_y//2, 10, 10))
+
+
 
 # CHALLENGE 8: High-score (file operation)
-
 # CHALLENGE 9: pause the screen
 
 # CHALLENGE 10: Bombs
+
 
 ###########################################################################
 # Setup
@@ -186,11 +196,11 @@ while True:
     # CHALLENGE 3: Generate a new fruit position when the previous one is eaten (Hints 3 and 4)
 
     if(check_boundary_collision(snake_position, window_x, window_y)):
-        game_over()
+        game_over(game_window,window_x,window_y,colors,score)
     # CHALLENGE 5: make sure the 'check_boundary_collision' is used
 
     if(check_self_collision(snake_position, snake_body)):
-        game_over()
+        game_over(game_window,window_x,window_y,colors,score)
     # CHALLENGE 6: call the function you implemented
 
     # CHALLENGE 8: High-score Logic
