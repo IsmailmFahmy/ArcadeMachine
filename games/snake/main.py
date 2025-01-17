@@ -5,6 +5,7 @@ This script implements the classic Snake game using Pygame. It includes various 
 such as generating fruit, detecting collisions, and managing game state.
 """
 import sys
+import os
 import time
 from operator import truediv
 
@@ -43,6 +44,31 @@ def pause_screen(game_window,windowx,windowy,colors):
                 if event.key == pygame.K_SPACE:
                     PAUSED=False
 
+def generate_boom_position(snake_body,window_x, window_y,fruit_list,boom_list,score):
+    """
+    generates a random position for the boom.
+
+    Args:
+        snake_body
+        window_y
+        window_x
+        fruit
+        boom_list
+        len boomlist =score//50
+
+    returns:
+        new boom list
+    """
+    print("boom number:"+str(score//50))
+    if len(boom_list)<score//50:
+        boomx = snake_body[0][0]
+        boomy = snake_body[0][1]
+        checklist= fruit_list+snake_body+boom_list
+        while [boomx,boomy] in checklist:
+            boomx = random.randint(0,window_x//10)*10
+            boomy = random.randint(0,window_y//10)*10
+        boom_list.append([boomx,boomy])
+    return boom_list
 
 
 def generate_fruit_position(snake_body, window_x, window_y):
@@ -109,6 +135,11 @@ def check_self_collision(snake_position, snake_body):
         return False
     pass
 
+def check_boom_collision(snake_position, boom_list):
+    if(snake_position in boom_list):
+        return True
+    else:
+        return False
 
 def game_over(game_window,window_x,window_y,colors,score):
     """
@@ -173,10 +204,23 @@ config = get_game_config()
 window_x, window_y = config["window_size"]
 snake_speed = config["snake_speed"]
 colors = config["colors"]
-
+boom_list = []
 # Create game window
+boom_damage=3
 pygame.display.set_caption("Snake")
 game_window = pygame.display.set_mode((window_x, window_y))
+
+imagename=["apple1.png","banana1.png","cherry.png","coconut.png","strawberry1.png"]
+images=[]
+sourceFileDir = os.path.dirname(os.path.abspath(__file__))
+#image = pygame.image.load(os.path.join(sourceFileDir, "Images", "Frame1.png"))
+#image load to array
+defaultimagesize=[20,20]
+for i in imagename:
+    image=pygame.image.load(os.path.join(sourceFileDir, "assets", "sprites",i)).convert()
+    image=pygame.transform.scale(image,defaultimagesize)
+    images.append(image)
+
 
 # Set up initial game state
 snake_position, snake_body = initialize_snake()  # Initialize snake
@@ -220,6 +264,8 @@ while True:
                 direction = "DOWN"
             elif event.key == pygame.K_p:
                 pause_screen(game_window,window_x,window_y,colors)
+            elif event.key == pygame.K_SPACE:
+                pause_screen(game_window, window_x, window_y, colors)
 
 
     # CHALLENGE 1: Movement logic
@@ -234,12 +280,13 @@ while True:
     # Snake body growing mechanism if fruit and snake collide score
     snake_body.insert(0, list(snake_position))
     if (
-        snake_position[0] == fruit_position[0]
-        and snake_position[1] == fruit_position[1]
+        snake_position[0] in [fruit_position[0],fruit_position[0]+10]
+        and snake_position[1] in [fruit_position[1],fruit_position[1]+10]
     ):
         fruit_position=generate_fruit_position(snake_body, window_x, window_y)
         score += 1
         print(score)
+        boom_list=generate_boom_position(snake_body,window_x,window_y,[fruit_position],boom_list,score)
         pass
     else:
         snake_body.pop()
@@ -255,6 +302,16 @@ while True:
     # CHALLENGE 6: call the function you implemented
 
     # CHALLENGE 8: High-score Logic
+    if(check_boom_collision(snake_position,boom_list)):
+        boom_list.remove(snake_position)
+        boom_list=generate_boom_position(boom_list,window_x,window_y,[fruit_position],boom_list,score)
+        if len(snake_body)<=boom_damage:
+            game_over(game_window,window_x,window_y,colors,score)
+        else:
+            score -= boom_damage//2
+            #score = max(score,0)
+            for i in range(boom_damage):
+                snake_body.pop()
 
     # CHALLENGE 10: use the function you implemented
 
@@ -266,6 +323,12 @@ while True:
         )  # Draw snake
 
     # CHALLENGE 11
+    for boom in boom_list:
+        pygame.draw.rect(
+            game_window,
+            colors["red"],
+            pygame.Rect(boom[0], boom[1], 10, 10),
+        )
 
     pygame.draw.rect(
         game_window,
@@ -273,5 +336,7 @@ while True:
         pygame.Rect(fruit_position[0], fruit_position[1], 10, 10),
     )  # Draw fruit
 
+    game_window.blit(images[4], fruit_position)
+   # pygame.display.flip()
     pygame.display.update()
     fps.tick(snake_speed)
