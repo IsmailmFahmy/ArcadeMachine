@@ -10,14 +10,25 @@ import pygame
 import random
 from config import get_game_config, initialize_snake
 
+
 ################################################################################################################
 # Functions
 
 
 def generate_fruit_position(snake_body, window_x, window_y):
-    """
-    Generates a random position for the fruit, ensuring it does not overlap with the snake's body.
+    x = random.randrange(0,window_x)
+    y = random.randrange(0,window_y)
+    x= round(x,-1)
+    y=round(y,-1)
+    while [x,y] in snake_body:
+        x = random.randrange(0,window_x)
+        y = random.randrange(0,window_y)
+        x= round(x,-1)
+        y=round(y,-1)
 
+    """
+    Generates a random position for the fru, ensuring it does not overlap with the snake's body.
+    
     Args:
         snake_body (list): List of [x, y] positions representing the snake's body.
         window_x (int): Width of the game window.
@@ -25,29 +36,29 @@ def generate_fruit_position(snake_body, window_x, window_y):
 
     Returns:
         tuple: A tuple (x, y) representing the fruit's position.
+        
     """
+    return (x,y)
     # CHALLENGE 4: make sure the fruit doesn't spawn on the snakes body
     # CHALLENGE 2: Implement the function generate_fruit_position to spawn a fruit RANDOMLY
     pass
 
 
 def check_boundary_collision(snake_position, window_x, window_y):
-    """
-    Checks if the snake's head has collided with the game window's boundary.
-
-    Args:
-        snake_position (list): [x, y] position of the snake's head.
-        window_x (int): Width of the game window.
-        window_y (int): Height of the game window.
-
-    Returns:
-        bool: True if a collision occurred, False otherwise.
-    """
-    # CHALLENGE 5: stay Inside the Arena!!
-    pass
+    if (
+        snake_position[0] <0 
+        or snake_position[0] >= window_x
+        or snake_position[1] <0 
+        or snake_position[1] >=window_y
+        ):
+        return True
+    return False
 
 
 def check_self_collision(snake_position, snake_body):
+    if snake_position in snake_body[1:]:
+        return True
+    return False
     """
     Checks if the snake's head has collided with its own body.
 
@@ -63,6 +74,16 @@ def check_self_collision(snake_position, snake_body):
 
 
 def game_over():
+    
+    colour=pygame.font.SysFont('Comic Sans MS',30)
+    text_surface=colour.render('Game over..',True,(34,56,45))
+    text_surface1=colour.render(f'Score: {score}',True,(34,56,45))
+    game_window.fill((238,45,34))
+    game_window.blit(text_surface1,(window_x//4,window_y//2-50))
+    game_window.blit(text_surface,(window_x//2-130,window_y//2-100))
+    pygame.display.flip()
+    time.sleep(3)
+    quit()
     """
     Handles the Game Over sequence, displaying a message and pausing the game before quitting.
 
@@ -77,9 +98,9 @@ def game_over():
     """
     # CHALLENGE 7: Game Over in Style!
 
-    time.sleep(3)  # render game over for 3 sec then quit
-
+    
 # CHALLENGE 8: High-score (file operation)
+
 
 # CHALLENGE 9: pause the screen
 
@@ -96,6 +117,7 @@ config = get_game_config()
 window_x, window_y = config["window_size"]
 snake_speed = config["snake_speed"]
 colors = config["colors"]
+pygame.font.init()
 
 # Create game window
 pygame.display.set_caption("Snake")
@@ -109,6 +131,7 @@ fruit_position = [360, 240]
 fruit_spawn = True
 
 #  CHALLENGE 2: call the function you implemented and spawn the fruit
+fruit_position=generate_fruit_position(snake_body,window_x,window_y)
 
 # Define the initial direction and score
 direction = "RIGHT"  # Snake starts moving to the right
@@ -132,30 +155,53 @@ while True:
         elif event.type == pygame.KEYDOWN:
 
             # CHALLENGE 1: Improve input handling for smoother gameplay
-            pass
+            if event.key == pygame.K_UP and direction !="DOWN":
+                direction = "UP"
+            elif event.key == pygame.K_DOWN and direction != "UP":
+                direction = "DOWN"
+            elif event.key == pygame.K_RIGHT and direction != "LEFT":
+                direction = "RIGHT"
+            elif event.key == pygame.K_LEFT and direction != "RIGHT":
+                direction = "LEFT"
+            
 
     # CHALLENGE 1: Movement logic
     if direction == "RIGHT":
         snake_position[0] += 10
+    elif direction == "UP":
+        snake_position[1] -= 10
+    elif direction == "LEFT":
+        snake_position[0] -=10
+    elif direction == "DOWN":
+        snake_position[1] +=10    
 
     # Snake body growing mechanism if fruit and snake collide score
     snake_body.insert(0, list(snake_position))
-    if (
-        snake_position[0] == fruit_position[0]
+    if (snake_position[0] == fruit_position[0]
         and snake_position[1] == fruit_position[1]
     ):
+        fruit_position=generate_fruit_position(snake_body,window_x,window_y)
+        score+=1
         # CHALLENGE 3: (Hints 1 and 2)
         pass
     else:
         snake_body.pop()
+    if (check_boundary_collision(snake_position,window_x,window_y)):game_over()
 
     # CHALLENGE 3: Generate a new fruit position when the previous one is eaten (Hints 3 and 4)
 
     # CHALLENGE 5: make sure the 'check_boundary_collision' is used
 
     # CHALLENGE 6: call the function you implemented
+    if(check_self_collision(snake_position,snake_body)):game_over()
 
     # CHALLENGE 8: High-score Logic
+
+    file= open('High.txt','w+')
+    highscore=file.read() 
+    if highscore == "" or highscore < score:
+        file.write(str(score))
+    file.close()    
 
     # CHALLENGE 10: use the function you implemented
 
