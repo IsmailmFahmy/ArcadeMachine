@@ -12,6 +12,17 @@ from config import get_game_config, initialize_snake
 
 ################################################################################################################
 # Functions
+def Store_Score(score):
+    full_score=[]
+    with open("score.txt", "a") as f:
+        f.write(str(score) + "\n")
+        f.close()
+    with open("score.txt", "r") as f:
+        for line in f.readlines():
+            full_score.append(int(line))
+        f.close()
+    print(full_score)
+    return full_score
 
 
 def generate_fruit_position(snake_body, window_x, window_y):
@@ -76,6 +87,38 @@ def game_over():
         None
     """
     # CHALLENGE 7: Game Over in Style!
+<<<<<<< Updated upstream
+=======
+    my_font = pygame.font.SysFont('Arial bold', 80)
+    game_window.fill(colors['red'])
+    text_surface = my_font.render('Game Over', True, colors["green"])
+    game_window.blit(text_surface, (window_x//2-150,window_y//2-100 ))
+    pygame.display.flip()
+
+    store_score = Store_Score(score)
+    store_score.sort(reverse=True)
+    print("Game Over,score:"+str(score))
+    print("Full score list"+str(store_score))
+
+    rank_font = pygame.font.SysFont('Arial bold', 40)
+
+    rank_surface = rank_font.render('Ranking', True, colors["green"])
+    game_window.blit(rank_surface, (window_x//2-80,window_y//2-40 ))
+    pygame.display.flip()
+
+    score_surface = rank_font.render('Your Score:'+str(score), True, colors["green"])
+    game_window.blit(score_surface, (window_x//2-100,window_y//2 ))
+    pygame.display.flip()
+
+    score_surface = rank_font.render('Highest Score:'+str(store_score[0]), True, colors["green"])
+    game_window.blit(score_surface, (window_x//2-100,window_y//2 +40))
+    pygame.display.flip()
+
+    time.sleep(10)  # render game over for 3 sec then quit
+
+    # pygame.draw.rect(game_window, colors['red'], (window_x//2, window_y//2, 10, 10))
+
+>>>>>>> Stashed changes
 
     time.sleep(3)  # render game over for 3 sec then quit
 
