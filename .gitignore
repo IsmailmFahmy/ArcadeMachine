@@ -6,3 +6,4 @@ __pycache__
 /games/space_invaders/docs/build
 /games/space_invaders/docs/build/**/*
 /games/space_invaders/player_data.json
+games/.DS_Store
