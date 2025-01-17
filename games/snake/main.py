@@ -31,6 +31,7 @@ def generate_fruit_position(snake_body, window_x, window_y):
     pass
 
 
+
 def check_boundary_collision(snake_position, window_x, window_y):
     """
     Checks if the snake's head has collided with the game window's boundary.
@@ -130,14 +131,26 @@ while True:
         if event.type == pygame.QUIT:
             quit()
         elif event.type == pygame.KEYDOWN:
-
             # CHALLENGE 1: Improve input handling for smoother gameplay
-            pass
+            if event.key == pygame.K_LEFT:
+                direction = "LEFT"
+            elif event.key == pygame.K_RIGHT:
+                direction = "RIGHT"
+            elif event.key == pygame.K_UP:
+                direction = "UP"
+            elif event.key == pygame.K_DOWN:
+                direction = "DOWN"
+
 
     # CHALLENGE 1: Movement logic
-    if direction == "RIGHT":
+    if direction == "LEFT":
+        snake_position[0] -= 10
+    elif direction == "RIGHT":
         snake_position[0] += 10
-
+    elif direction == "UP":
+        snake_position[1] -= 10
+    elif direction == "DOWN":
+        snake_position[1] += 10
     # Snake body growing mechanism if fruit and snake collide score
     snake_body.insert(0, list(snake_position))
     if (
