@@ -26,6 +26,24 @@ def Store_Score(score):
     print(full_score)
     return full_score
 
+def pause_screen(game_window,windowx,windowy,colors):
+    PAUSED=True
+    while PAUSED:
+        rank_font = pygame.font.SysFont('Arial bold', 50)
+
+        rank_surface = rank_font.render('PRESS SPACE TO CONTINUE', True, colors["green"])
+        game_window.blit(rank_surface, (window_x // 2 - 200, window_y // 2 - 40))
+        pygame.display.flip()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                # CHALLENGE 1: Improve input handling for smoother gameplay
+                if event.key == pygame.K_SPACE:
+                    PAUSED=False
+
+
 
 def generate_fruit_position(snake_body, window_x, window_y):
     """
@@ -132,7 +150,8 @@ def game_over(game_window,window_x,window_y,colors,score):
     pygame.display.flip()
 
     time.sleep(10)  # render game over for 3 sec then quit
-
+    pygame.quit()
+    sys.exit()
     # pygame.draw.rect(game_window, colors['red'], (window_x//2, window_y//2, 10, 10))
 
 
@@ -187,7 +206,8 @@ while True:
     # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            quit()
+            pygame.quit()
+            sys.exit()
         elif event.type == pygame.KEYDOWN:
             # CHALLENGE 1: Improve input handling for smoother gameplay
             if event.key == pygame.K_LEFT and direction != "RIGHT":
@@ -198,6 +218,8 @@ while True:
                 direction = "UP"
             elif event.key == pygame.K_DOWN and direction != "UP":
                 direction = "DOWN"
+            elif event.key == pygame.K_p:
+                pause_screen(game_window,window_x,window_y,colors)
 
 
     # CHALLENGE 1: Movement logic
