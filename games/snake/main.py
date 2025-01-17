@@ -6,6 +6,8 @@ such as generating fruit, detecting collisions, and managing game state.
 """
 
 import time
+from operator import truediv
+
 import pygame
 import random
 from config import get_game_config, initialize_snake
@@ -52,7 +54,12 @@ def check_boundary_collision(snake_position, window_x, window_y):
         bool: True if a collision occurred, False otherwise.
     """
     # CHALLENGE 5: stay Inside the Arena!!
+    if snake_position[0] < 0 or snake_position[0] >= window_x or snake_position[1] < 0 or snake_position[1] >= window_y:
+        return True
+    else:
+        return False
     pass
+
 
 
 def check_self_collision(snake_position, snake_body):
@@ -67,6 +74,10 @@ def check_self_collision(snake_position, snake_body):
         bool: True if a self-collision occurred, False otherwise.
     """
     # CHALLENGE 6: Stay in One Piece!!
+    if snake_position in snake_body[1:]:
+        return True
+    else :
+        return False
     pass
 
 
@@ -84,7 +95,7 @@ def game_over():
         None
     """
     # CHALLENGE 7: Game Over in Style!
-
+    print("Game Over")
     time.sleep(3)  # render game over for 3 sec then quit
 
 # CHALLENGE 8: High-score (file operation)
@@ -140,13 +151,13 @@ while True:
             quit()
         elif event.type == pygame.KEYDOWN:
             # CHALLENGE 1: Improve input handling for smoother gameplay
-            if event.key == pygame.K_LEFT:
+            if event.key == pygame.K_LEFT and direction != "RIGHT":
                 direction = "LEFT"
-            elif event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT and direction != "LEFT":
                 direction = "RIGHT"
-            elif event.key == pygame.K_UP:
+            elif event.key == pygame.K_UP and direction != "DOWN":
                 direction = "UP"
-            elif event.key == pygame.K_DOWN:
+            elif event.key == pygame.K_DOWN and direction != "UP":
                 direction = "DOWN"
 
 
@@ -174,8 +185,12 @@ while True:
 
     # CHALLENGE 3: Generate a new fruit position when the previous one is eaten (Hints 3 and 4)
 
+    if(check_boundary_collision(snake_position, window_x, window_y)):
+        game_over()
     # CHALLENGE 5: make sure the 'check_boundary_collision' is used
 
+    if(check_self_collision(snake_position, snake_body)):
+        game_over()
     # CHALLENGE 6: call the function you implemented
 
     # CHALLENGE 8: High-score Logic
