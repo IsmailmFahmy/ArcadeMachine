@@ -52,8 +52,11 @@ def write_highscores(highscores):
 #The watch of the timekeeper gets the time in miliseconds and shows it to the timekeeper as a string format 'MM:SS:MMM'.
 #START HERE: Implement the logic to calculate minutes, seconds, and milliseconds.
 def convert_Time(miliseconds):
-
-    return
+    seconds = miliseconds//1000
+    minutes = seconds//60
+    seconds = seconds - minutes*60
+    miliseconds = miliseconds %1000
+    return str(minutes) + ":" + str(seconds) + ":" + str(miliseconds)
 
 
 #the drawn game map
