@@ -88,41 +88,29 @@ def check_self_collision(snake_position, snake_body):
 
 
 def game_over():
-    
-    colour=pygame.font.SysFont('Comic Sans MS',30)
-    text_surface=colour.render('Game over..',True,(34,56,45))
-    text_surface1=colour.render(f'Score: {score}',True,(34,56,45))
+    colour=pygame.font.SysFont('Comic Sans MS',50)
     game_window.fill((238,45,34))
-    game_window.blit(text_surface1,(window_x//4,window_y//2-50))
-    game_window.blit(text_surface,(window_x//2-130,window_y//2-100))
+
+    # Game over text allignment and rendering
+    game_over=colour.render('Game over..',True,(34,56,45))
+    center =game_over.get_rect(center=(window_x/2, window_y/2))
+    game_window.blit(game_over,center)
+
+    score_txt=colour.render(f'Score: {score}',True,(34,56,45))
+
+
+    text_width, _ = score_txt.get_size()
+    text_x = window_x - text_width - 20  # Align to the right edge
+    text_y = 0
+
+    game_window.blit(score_txt,(text_x, text_y))
+
+
     pygame.display.flip()
     time.sleep(3)
     quit()
-    """
-    Handles the Game Over sequence, displaying a message and pausing the game before quitting.
-
-    Args:
-        game_window (pygame.Surface): The Pygame surface for the game window.
-        window_x (int): Width of the game window.
-        window_y (int): Height of the game window.
-        colors (dict): Dictionary of color mappings.
-
-    Returns:
-        None
-    """
-    # CHALLENGE 7: Game Over in Style!
-
-    
-# CHALLENGE 8: High-score (file operation)
 
 
-# CHALLENGE 9: pause the screen
-
-# CHALLENGE 10: Bombs
-
-
-###########################################################################
-# Setup
 
 # # Initialize pygame
 pygame.init()
