@@ -88,7 +88,7 @@ def generate_fruit_position(snake_body, window_x, window_y):
     fruitx=snake_body[0][0]
     fruity=snake_body[0][1]
 
-    for [fruit_x, fruit_y] in snake_body:
+    for [fruitx, fruity] in snake_body:
         fruitx=random.randint(0,int(window_x/10))*10
         fruity=random.randint(0,int(window_y/10))*10
 
