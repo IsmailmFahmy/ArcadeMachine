@@ -781,7 +781,7 @@ def music_fadeout():
 #START HERE: Add 'Automatic Mode' to the options menu
 #HINT: Use the gearSetting variable to toggle manual/automatic. Use the car property "automatic" to prepare for the real implementation
 option_selected = 0
-option_choosable = ["Music volume up", "Music volume down", "Sound volume up", "Sound volume down","exit"]
+option_choosable = ["Music volume up", "Music volume down", "Sound volume up", "Sound volume down","Automatic Mode","exit"]
 def options(screen, lastButton):
     global option_selected, option_choosable, music_volume_100, sound_volume_100, current_scene, selected, general_volume, gearSetting
     draw_Text(screen, font_header,"white" ,"Options", (50,window_size[1]/12))
@@ -808,6 +808,8 @@ def options(screen, lastButton):
                     if sound_volume_100 >= 10:
                         sound_volume_100 -= 10
                 elif option_selected == 4:
+                    gearSetting = not gearSetting
+                elif option_selected == 5:
                     option_selected = 0
                     current_scene = main_menu
                     selected = 0
@@ -831,7 +833,7 @@ def options(screen, lastButton):
 
     draw_Text(screen, font_selectable, "white", str(music_volume_100) + "%", (window_size[0] - font_selectable.size(str(music_volume_100) + "%")[0] - 50,window_size[1]/5*2))
     draw_Text(screen, font_selectable, "white", str(sound_volume_100) + "%", (window_size[0] - font_selectable.size(str(sound_volume_100) + "%")[0] - 50,window_size[1]/5*2 +  + window_size[1]/10*2))
-
+    #draw_Text(screenm font_selectable,"white")
 
 
     return screen
