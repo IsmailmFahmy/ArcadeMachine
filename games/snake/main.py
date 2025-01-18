@@ -33,7 +33,18 @@ def pause_screen(game_window,windowx,windowy,colors):
         rank_font = pygame.font.SysFont('Arial bold', 50)
 
         rank_surface = rank_font.render('PRESS SPACE TO CONTINUE', True, colors["green"])
-        game_window.blit(rank_surface, (window_x // 2 - 200, window_y // 2 - 40))
+        center=rank_surface.get_rect(center=(windowx/2, windowy/2))
+        game_window.blit(rank_surface,center)
+
+
+        score_txt=rank_font.render(f'Score: {score}',True,(34,56,45))
+
+        text_width, _ = score_txt.get_size()
+        text_x = windowx - text_width - 20  # Align to the right edge
+        text_y = 0
+        game_window.blit(score_txt,(text_x, text_y))
+
+
         pygame.display.flip()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -155,32 +166,47 @@ def game_over(game_window,window_x,window_y,colors,score):
         None
     """
     # CHALLENGE 7: Game Over in Style!
-    my_font = pygame.font.SysFont('Arial bold', 80)
+    game_over_font = pygame.font.SysFont('Arial bold', 80)
     game_window.fill(colors['red'])
-    text_surface = my_font.render('Game Over', True, colors["green"])
-    game_window.blit(text_surface, (window_x//2-150,window_y//2-100 ))
-    pygame.display.flip()
+    game_over_text = game_over_font.render('Game Over', True, colors["green"])
+    game_over_pos =game_over_text.get_rect(center=(window_x/2, (window_y/2) - (window_x // 5) ))
+    game_window.blit(game_over_text, game_over_pos)
 
     store_score = Store_Score(score)
     store_score.sort(reverse=True)
     print("Game Over,score:"+str(score))
     print("Full score list"+str(store_score))
 
-    rank_font = pygame.font.SysFont('Arial bold', 40)
 
-    rank_surface = rank_font.render('Ranking', True, colors["green"])
-    game_window.blit(rank_surface, (window_x//2-80,window_y//2-40 ))
+
+    # CURRENT SCORE TEXT RENDER
+    score_font = pygame.font.SysFont('Arial bold', 40)
+    score_txt=score_font.render(f'Score: {score}',True,(34,56,45))
+    text_width, _ = score_txt.get_size()
+    text_x = window_x - text_width - 50  # Align to the right edge
+    text_y = 0
+    game_window.blit(score_txt,(text_x, text_y))
+
+
+    # rank_surface = rank_font.render('Ranking', True, colors["green"])
+    # center=rank_surface.get_rect(center=(window_x/2, window_y/2))
+    # score_text = score_font.render('Your Score:'+str(score), True, colors["green"])
+
+    # center=rank_surface.get_rect(center=(window_x/2, window_y/2))
+    # score_pos = score_text.get_rect(center=(window_x/2, window_y/2))
+    # game_window.blit(score_text,score_pos)
+
+
+    # HIGH SCORE TEXT RENDER
+    high_score_text = score_font.render(f'Highest Score: {str(store_score[0])}', True, colors["green"])
+    high_score_pos = high_score_text.get_rect(center=(window_x/2, window_y/2))
+    game_window.blit(high_score_text, high_score_pos)
+
+
+
     pygame.display.flip()
 
-    score_surface = rank_font.render('Your Score:'+str(score), True, colors["green"])
-    game_window.blit(score_surface, (window_x//2-100,window_y//2 ))
-    pygame.display.flip()
-
-    score_surface = rank_font.render('Highest Score:'+str(store_score[0]), True, colors["green"])
-    game_window.blit(score_surface, (window_x//2-100,window_y//2 +40))
-    pygame.display.flip()
-
-    time.sleep(10)  # render game over for 3 sec then quit
+    time.sleep(3)  # render game over for 3 sec then quit
     pygame.quit()
     sys.exit()
     # pygame.draw.rect(game_window, colors['red'], (window_x//2, window_y//2, 10, 10))
