@@ -830,10 +830,14 @@ def options(screen, lastButton):
             draw_Text(screen, font_selectable,"white", "exit", (window_size[0]-50-font_selectable.size("exit")[0],window_size[1]-50-font_selectable.size("exit")[1]))
 
         font_selectable.set_underline(False)
+    gearStr="Off"
+    if gearSetting :
+        gearStr="On"
+    else: gearStr="Off"
 
     draw_Text(screen, font_selectable, "white", str(music_volume_100) + "%", (window_size[0] - font_selectable.size(str(music_volume_100) + "%")[0] - 50,window_size[1]/5*2))
     draw_Text(screen, font_selectable, "white", str(sound_volume_100) + "%", (window_size[0] - font_selectable.size(str(sound_volume_100) + "%")[0] - 50,window_size[1]/5*2 +  + window_size[1]/10*2))
-    #draw_Text(screenm font_selectable,"white")
+    draw_Text(screen, font_selectable,"white",gearStr,(window_size[0] - font_selectable.size(str(sound_volume_100) + "%")[0] - 50,window_size[1]/5*2 +  + window_size[1]/10*4))
 
 
     return screen
