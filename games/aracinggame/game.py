@@ -56,7 +56,7 @@ def convert_Time(miliseconds):
     minutes = seconds//60
     seconds = seconds - minutes*60
     miliseconds = miliseconds %1000
-    return str(minutes) + ":" + str(seconds) + ":" + str(miliseconds)
+    return f"{minutes:02}:{seconds:02}:{miliseconds:03}"
 
 
 #the drawn game map
