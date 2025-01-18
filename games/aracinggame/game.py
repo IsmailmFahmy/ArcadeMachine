@@ -1,9 +1,12 @@
+import struct
+
 import pygame
 import platform, os
 import json
 from car import newCar, handleCarEvents, updateCar, pos, rpm, gear, speed, rotatedTexture, friction, redlining, \
     automatic
 from math import pi
+import json
 
 
 
@@ -131,12 +134,20 @@ def write_ghost_car(event_array_with_ticks):
         - Choose a file format that can store both the tick and the event data (e.g., JSON or pickle).
         - Ensure pygame events are serialized properly.
     """
-    file = open("events.txt", "w")
-    json.dump(event_array_with_ticks, file)
-    file.close()
+    # file = open("events.txt", "w")
+    # json.dump(event_array_with_ticks, file)
+    # file.close()
+    print("Writing ghost car")
+    print(event_array_with_ticks)
+    with open("ghost_car.json", "w") as file:
+        for e in event_array_with_ticks:
+            print(e)
+            for element in e:
+                    json.dump(element, file)
+            file.write("\n")
+        file.close()
 
 
-    pass
 
 
 #HACKATHON CHALLENGE 3.1.2 - Read Temporal Car Aura
@@ -635,7 +646,8 @@ def game(screen, lastButtons):
         
         if pressed_keys[pygame.K_SPACE]:
             gamestate = not_started
-        
+        write_ghost_car(event_array_with_ticks)
+
         return screen
 
     #when you completed the track
@@ -684,7 +696,7 @@ def game(screen, lastButtons):
                     play_music_in_loop()
                     gamestate = not_started
                     return screen
-                elif pressedButton.key == pygame.K_HOME:
+                elif pressedButton.key == pygame.K_HOME or pressedButton.key == pygame.K_TAB:
                     print("Debug ghost created")
                     write_ghost_car(event_array_with_ticks)
                 elif pressedButton.key != pygame.K_SPACE:

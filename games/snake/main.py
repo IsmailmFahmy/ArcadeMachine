@@ -71,7 +71,7 @@ def generate_boom_position(snake_body,window_x, window_y,fruit_list,boom_list,sc
         new boom list
     """
     print("boom number:"+str(score//50))
-    if len(boom_list)<score//50:
+    if len(boom_list)<score//50+1:
         boomx = snake_body[0][0]
         boomy = snake_body[0][1]
         checklist= fruit_list+snake_body+boom_list
