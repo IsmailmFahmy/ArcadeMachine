@@ -62,7 +62,7 @@ def handleCarEvents(car, events, keys):
     for e in events:
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_q:
-                gear -= 6 >= gear > NEUTRAL
+                gear -= 6 >= gear > NEUTRAL # Evaluates if gear is between 1 and 6, if it is, it decrements gear by 1
             elif e.key == pygame.K_e:
                 gear += NEUTRAL <= gear < 6
             elif e.key in (pygame.K_0, pygame.K_KP0):
@@ -125,12 +125,19 @@ def updateCar(car, signals, fps):
     # the driver has these four methods of controlling their car
     gear, gas, brake, steer = signals
 
+    speed = car['speed']
     # HACKATHON CHALLENGE 2
     # Make the gears change automatically so Speedy doesn't have to shift anymore!
     # START HERE: Add logic to shift gears automatically
     # HINT: Use car['automatic'] to decide if shifting should be manual or automatic
     if car["automatic"]:
-        
+        if type(gear) == int:
+            maxspeed = car["enginemax"] / car["ratio"][gear]
+
+            if speed >= maxspeed and gear < 6:
+                gear +=1 
+            elif speed < (maxspeed//2) and gear > 1:
+                gear -=1 
         pass
 
 
@@ -287,8 +294,10 @@ def gear(car):
 
 
 def automatic(car, set=None):
-    a = car["automatic"]
-    if type(set) == bool: car["automatic"] = set
+    a = car["automatic"] # automatic is a bool 
+    if type(set) == bool: 
+        car["automatic"] = set
+
     return a
 
 
