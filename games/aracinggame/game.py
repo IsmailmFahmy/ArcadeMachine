@@ -1,5 +1,6 @@
 import pygame
 import platform, os
+import json
 from car import newCar, handleCarEvents, updateCar, pos, rpm, gear, speed, rotatedTexture, friction, redlining, \
     automatic
 from math import pi
@@ -130,6 +131,10 @@ def write_ghost_car(event_array_with_ticks):
         - Choose a file format that can store both the tick and the event data (e.g., JSON or pickle).
         - Ensure pygame events are serialized properly.
     """
+    file = open("events.txt", "w")
+    json.dump(event_array_with_ticks, file)
+    file.close()
+
 
     pass
 
@@ -712,6 +717,7 @@ def game(screen, lastButtons):
 
 
 def leave(screen, lastButton):
+    write_ghost_car(event_array_with_ticks)
     exit()
 
 pygame.font.init()
@@ -902,6 +908,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+
         elif event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                     
             lastButtons.append(event)
@@ -916,7 +923,8 @@ while True:
                         exit()
                 
         
-    event_array_with_ticks.append((tick_count, lastButtons[:]))
+    # event_array_with_ticks.append((tick_count, lastButtons[:]))
+    event_array_with_ticks.append((tick_count, ()))
 
     screen.fill("black")
     screen = current_scene(screen, lastButtons)
