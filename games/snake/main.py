@@ -330,7 +330,7 @@ while True:
     # CHALLENGE 8: High-score Logic
     if(check_boom_collision(snake_position,boom_list)):
         boom_list.remove(snake_position)
-        boom_list=generate_boom_position(boom_list,window_x,window_y,[fruit_position],boom_list,score)
+        boom_list=generate_boom_position(snake_body,window_x,window_y,[fruit_position],boom_list,score)
         if len(snake_body)<=boom_damage:
             game_over(game_window,window_x,window_y,colors,score)
         else:
