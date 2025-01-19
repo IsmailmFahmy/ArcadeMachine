@@ -1,3 +1,14 @@
+# Preface
+This is a fork of the [repository provided](https://github.com/CleoSchulten/ArcadeMachine).
+
+This is the work of Group 2.
+The 2 games worked on were:
+- Snake game
+- Racing game
+
+
+---
+
 # Welcome to CodeArcade
 
 In this Hackathon, You will work in teams on a pre-built virtual arcade machine to add onto existing games or add your own game with the help from each other and our mentoring team.
